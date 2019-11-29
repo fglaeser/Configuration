@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Crisp.Extensions.Configuration.Zookeeper\Crisp.Extensions.Configuration.Zookeeper.csproj" />
+    <ProjectReference Include="..\..\src\DotNet.Extensions.Configuration.Zookeeper\DotNet.Extensions.Configuration.Zookeeper.csproj" />
   </ItemGroup>
 
 </Project>

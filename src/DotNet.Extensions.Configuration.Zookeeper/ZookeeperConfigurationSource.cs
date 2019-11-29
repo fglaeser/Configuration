@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Crisp.Extensions.Configuration.Zookeeper
+namespace DotNet.Extensions.Configuration.Zookeeper
 {
     /// <summary>
     /// Represents a zookeeper nodes as an <see cref="IConfigurationSource"/>.

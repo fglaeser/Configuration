@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using org.apache.zookeeper;
 
-namespace Crisp.Extensions.Configuration.Zookeeper
+namespace DotNet.Extensions.Configuration.Zookeeper
 {
     /// <summary>
     /// the default zooKeeper factory.

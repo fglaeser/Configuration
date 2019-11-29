@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Crisp.Extensions.Configuration.Zookeeper
+namespace DotNet.Extensions.Configuration.Zookeeper
 {
     /// <summary>
     /// a zooKeeper factory used for create <see cref="ZooKeeper" /> instance.

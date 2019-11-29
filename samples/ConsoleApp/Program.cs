@@ -1,4 +1,4 @@
-﻿using Crisp.Extensions.Configuration.Zookeeper;
+﻿using DotNet.Extensions.Configuration.Zookeeper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using System;

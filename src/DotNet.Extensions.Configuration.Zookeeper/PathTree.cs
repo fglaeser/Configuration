@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Crisp.Extensions.Configuration.Zookeeper
+namespace DotNet.Extensions.Configuration.Zookeeper
 {
     internal class PathTree
     {

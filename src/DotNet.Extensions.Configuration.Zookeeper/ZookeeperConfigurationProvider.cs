@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using org.apache.zookeeper;
 using System;
 using System.Collections.Generic;
@@ -8,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Crisp.Extensions.Configuration.Zookeeper
+namespace DotNet.Extensions.Configuration.Zookeeper
 {
     /// <summary>
     /// A zookeeper based <see cref="ConfigurationProvider"/>.

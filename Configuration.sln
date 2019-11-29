@@ -9,11 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C9BD0E24-5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{72296562-1C89-48F3-80B9-F48B5B7A5CE5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crisp.Extensions.Configuration.Zookeeper", "src\Crisp.Extensions.Configuration.Zookeeper\Crisp.Extensions.Configuration.Zookeeper.csproj", "{55A5DB6E-1F7C-40E7-90AD-911527451898}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNet.Extensions.Configuration.Zookeeper", "src\DotNet.Extensions.Configuration.Zookeeper\DotNet.Extensions.Configuration.Zookeeper.csproj", "{55A5DB6E-1F7C-40E7-90AD-911527451898}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "samples\ConsoleApp\ConsoleApp.csproj", "{0AB49C68-96A1-436E-8580-2D4BDE9F217C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crisp.Extensions.Configuration.Zookeeper.Test", "test\Crisp.Extensions.Configuration.Zookeeper.Test\Crisp.Extensions.Configuration.Zookeeper.Test.csproj", "{DB924E3C-66F1-40F5-BE26-D4E58F846A35}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNet.Extensions.Configuration.Zookeeper.Test", "test\DotNet.Extensions.Configuration.Zookeeper.Test\DotNet.Extensions.Configuration.Zookeeper.Test.csproj", "{DB924E3C-66F1-40F5-BE26-D4E58F846A35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
