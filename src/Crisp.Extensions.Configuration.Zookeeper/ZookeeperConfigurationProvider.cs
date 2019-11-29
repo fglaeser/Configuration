@@ -17,6 +17,7 @@ namespace Crisp.Extensions.Configuration.Zookeeper
         private readonly ZookeeperOption _option;
         private readonly IZooKeeperFactory _zooKeeperFactory;
         private readonly ManualResetEvent _connectedEvent;
+        private AutoResetEvent _loadCompletedEvent;
         private ZooKeeper _zooKeeper;
         private NodeWatcher _watcher;
         private PathTree _pathTree;
@@ -34,6 +35,7 @@ namespace Crisp.Extensions.Configuration.Zookeeper
             _watcher.StateChanged += OnStateChanged;
             _watcher.NodeChanged += OnNodeChanged;
             _connectedEvent = new ManualResetEvent(false);
+            _loadCompletedEvent = new AutoResetEvent(false);
         }
 
         /// <summary>
@@ -46,7 +48,8 @@ namespace Crisp.Extensions.Configuration.Zookeeper
             {
                 throw new Exception("connect to zookeeper timeout");
             }
-            LoadAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+            _loadCompletedEvent.WaitOne();
+            //LoadAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
         private async Task LoadAsync()
@@ -54,19 +57,18 @@ namespace Crisp.Extensions.Configuration.Zookeeper
             var data = new Dictionary<string, string>();
             var stack = new Stack<KeyValuePair<string, PathTree.TreeNode>>();
             _pathTree = new PathTree();
-            stack.Push(new KeyValuePair<string, PathTree.TreeNode>("/", _pathTree.Root));
+            stack.Push(new KeyValuePair<string, PathTree.TreeNode>(_option.RootPath ?? "/", _pathTree.Root));
 
             while (stack.Count > 0)
             {
                 var pair = stack.Pop();
                 var path = pair.Key;
                 var currentNode = pair.Value;
-
                 var value = await GetDataAsync(path, true);
                 if (value != null)
                 {
                     var key = ConvertPathToKey(path);
-                    data[ConvertPathToKey(path)] = value;
+                    data[key] = value;
 
                     var children = await GetChildrenAsync(path, true);
                     children?.ForEach(item =>
@@ -87,8 +89,7 @@ namespace Crisp.Extensions.Configuration.Zookeeper
             {
                 throw new ArgumentNullException(nameof(path));
             }
-
-            return path.Trim('/').Replace("/", ConfigurationPath.KeyDelimiter);
+            return path.Substring(_option.RootPath.Length).Trim('/').Replace("/", ConfigurationPath.KeyDelimiter);
         }
 
         private async Task<string> GetDataAsync(string path, bool watch = false)
@@ -101,13 +102,12 @@ namespace Crisp.Extensions.Configuration.Zookeeper
 
         private async Task<List<string>> GetChildrenAsync(string path, bool watch = false)
         {
-            var childResult = await _zooKeeper.getChildrenAsync(path, true);
+            var childResult = await _zooKeeper.getChildrenAsync(path, watch);
             if (childResult == null) return null;
             return childResult.Children;
         }
 
-
-        private Task OnStateChanged(WatchedEvent arg)
+        private async Task OnStateChanged(WatchedEvent arg)
         {
             switch (arg.getState())
             {
@@ -116,7 +116,9 @@ namespace Crisp.Extensions.Configuration.Zookeeper
                     break;
                 case Watcher.Event.KeeperState.SyncConnected:
                     _connectedEvent.Set();
-                    return LoadAsync();
+                     await LoadAsync();
+                    _loadCompletedEvent.Set();
+                    break;
                 case Watcher.Event.KeeperState.AuthFailed:
                     //todo:throw custom exception.
                     throw new Exception("connect to zookeeper auth failed");
@@ -124,14 +126,18 @@ namespace Crisp.Extensions.Configuration.Zookeeper
                     //we won't connect readonly when instantiate zookeeper.
                     break;
                 case Watcher.Event.KeeperState.Expired:
+
                     _connectedEvent.Reset();
+                    _loadCompletedEvent.Set();
                     _zooKeeper = _zooKeeperFactory.CreateZooKeeper(_option.ConnectionString, _option.SessionTimeout, out _watcher);
-                    break;
+                    _watcher.StateChanged += OnStateChanged;
+                    _watcher.NodeChanged += OnNodeChanged;
+                  break;
                 default:
                     break;
             }
 
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
         }
 
         private async Task OnNodeChanged(WatchedEvent arg)
