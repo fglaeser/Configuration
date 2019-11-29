@@ -6,7 +6,7 @@ Microsoft provides class libraries that use various configuration sources in the
 
 # Usage
 install the nuget package  
-```Install-Package Crisp.Extensions.Configuration.Zookeeper```
+```Install-Package DotNet.Extensions.Configuration.Zookeeper```
 
 assume you have these nodes in zookeeper  
 /AccountApp/Rate/USD = 6.35  
