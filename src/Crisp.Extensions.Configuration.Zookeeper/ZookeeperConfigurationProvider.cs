@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using org.apache.zookeeper;
 using System;
 using System.Collections.Generic;
@@ -142,6 +143,7 @@ namespace Crisp.Extensions.Configuration.Zookeeper
 
         private async Task OnNodeChanged(WatchedEvent arg)
         {
+            //Console.WriteLine($"OnNodeChanged Type: {arg.get_Type()} Path: {arg.getPath()}");
             var type = arg.get_Type();
             var path = arg.getPath();
             var key = ConvertPathToKey(path);

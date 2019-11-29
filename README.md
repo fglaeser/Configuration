@@ -1,7 +1,8 @@
 Travis: [![Build Status](https://travis-ci.org/yuniansheng/Configuration.svg?branch=master)](https://travis-ci.org/yuniansheng/Configuration)
 
 # Introduction
-微软在Microsoft.Extensions.Configuration系列nuget包中提供了使用各种配置源的类库，包括使用Json文件作为配置源、使用XML文件、环境变更、命令行参数等。同时，作为应用程序使用配置的最佳实践，Microsoft.Extensions.Configuration.Abstraction定义了规范的API，遵循这些API使用配置非常方便。但是，微软提供的配置源总是有限的，像在分布式环境中，经常会使用zookeeper作为配置源，所以该项目目的是提供一些官方包之外的配置源,同时遵循最佳实践，方便使用方能够通过统一接口使用各种配置源。
+
+Microsoft provides class libraries that use various configuration sources in the Microsoft.Extensions.Configuration series of nuget packages, including the use of Json files such as configuration sources, XML files, environment variables, command line parameters, etc. At the same time, as a best practice for configuring application usage, Microsoft.Extensions.Configuration.Abstraction defines standardized APIs, and it is very convenient to follow these API usage settings. However, the configuration sources provided by Microsoft are always limited. For example, in a distributed environment,Zookeeper is often used as the configuration source. Therefore, the purpose of this project is to provide configuration sources other than the official package, while best practices are followed for easy use. The parties can use various configuration sources through a unified interface.
 
 # Usage
 install the nuget package  
