@@ -1,0 +1,13 @@
+version: '2'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+  zoonavigator:
+    image: elkozmon/zoonavigator
+    ports:
+     - "9000:9000"
+    environment:
+      HTTP_PORT: 9000
+ 

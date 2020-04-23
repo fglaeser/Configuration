@@ -8,12 +8,15 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/fglaeser/DotNet.Extensions.Configuration.Zookeeper</RepositoryUrl>
     <PackageProjectUrl>https://github.com/fglaeser/DotNet.Extensions.Configuration.Zookeeper</PackageProjectUrl>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
-    <Version>2.0.0</Version>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <FileVersion>2.1.0.0</FileVersion>
+    <Version>2.1.0</Version>
     <RepositoryType>git</RepositoryType>
     <PackageId>Extensions.Configuration.Zookeeper</PackageId>
     <Product>Extensions.Configuration.Zookeeper</Product>
+    <PackageReleaseNotes>Add auth information.
+Raise exception when something goes wrong loading.
+</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,22 +1,24 @@
-﻿using System;
+﻿using org.apache.zookeeper;
 using System.Collections.Generic;
-using System.Text;
-using org.apache.zookeeper;
 
 namespace DotNet.Extensions.Configuration.Zookeeper
 {
+  /// <summary>
+  /// the default zooKeeper factory.
+  /// </summary>
+  internal class DefaultZooKeeperFactory : IZooKeeperFactory
+  {
     /// <summary>
-    /// the default zooKeeper factory.
+    /// create zooKeeper instance.
     /// </summary>
-    internal class DefaultZooKeeperFactory : IZooKeeperFactory
+    public ZooKeeper CreateZooKeeper(string connectionString, int sessionTimeout, IEnumerable<AuthData> authData, out NodeWatcher watcher)
     {
-        /// <summary>
-        /// create zooKeeper instance.
-        /// </summary>
-        public ZooKeeper CreateZooKeeper(string connectionString, int sessionTimeout, out NodeWatcher watcher)
-        {
-            watcher = new NodeWatcher();
-            return new ZooKeeper(connectionString, sessionTimeout, watcher);
-        }
+      watcher = new NodeWatcher();
+      var zk = new ZooKeeper(connectionString, sessionTimeout, watcher);
+      foreach(var auth in authData)
+        zk.addAuthInfo(auth.Scheme, auth.Data);
+
+      return zk;
     }
+  }
 }

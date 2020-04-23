@@ -31,3 +31,21 @@ var hkdRate = configuration["Rate:HKD"];    //0.87
 var notifyMethod = configuration["AccountChangeNotificationMethod"];    //Email
 ```
    
+You can also add authentication information like this:
+
+```C#
+IConfigurationBuilder builder = new ConfigurationBuilder();
+builder.AddZookeeper(option =>
+{
+    option.ConnectionString = "localhost:2181";
+    option.ConnectionTimeout = 10000;
+    option.RootPath = "/AccountApp";
+    option.SessionTimeout = 3000;
+    options.AddAuthInfo("digest", Encoding.UTF8.GetBytes("app1:app123"));
+});
+var configuration = builder.Build();
+
+var usdRate = configuration["Rate:USD"];    //6.35
+var hkdRate = configuration["Rate:HKD"];    //0.87
+var notifyMethod = configuration["AccountChangeNotificationMethod"];    //Email
+```
