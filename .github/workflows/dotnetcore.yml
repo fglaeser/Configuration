@@ -10,6 +10,11 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    services:
+      zookeeper:
+        image: wurstmeister/zookeeper
+        ports: 
+          - 2181:2181
 
     steps:
     - uses: actions/checkout@v2
