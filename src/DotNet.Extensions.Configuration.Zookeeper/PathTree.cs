@@ -77,6 +77,7 @@ namespace DotNet.Extensions.Configuration.Zookeeper
 
       public TreeNode(string key)
       {
+        Key = key;
         Children = new List<TreeNode>();
       }
     }

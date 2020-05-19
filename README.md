@@ -1,6 +1,6 @@
-| NuGet Version  | Downloads |
-| ------------- | ------------- |
-| [![NuGet Version and Downloads count](https://img.shields.io/nuget/vpre/Extensions.Configuration.Zookeeper.svg)](http://www.nuget.org/packages/Extensions.Configuration.Zookeeper/)|[![NuGet Download count](https://img.shields.io/nuget/dt/Extensions.Configuration.Zookeeper.svg)](http://www.nuget.org/packages/Extensions.Configuration.Zookeeper/)|
+| NuGet Version  | Downloads | Build Status |
+| ------------- | ------------- | ----- |
+| [![NuGet Version and Downloads count](https://img.shields.io/nuget/vpre/Extensions.Configuration.Zookeeper.svg)](http://www.nuget.org/packages/Extensions.Configuration.Zookeeper/)|[![NuGet Download count](https://img.shields.io/nuget/dt/Extensions.Configuration.Zookeeper.svg)](http://www.nuget.org/packages/Extensions.Configuration.Zookeeper/)|![CI](https://github.com/fglaeser/Extensions.Configuration.Zookeeper/workflows/CI/badge.svg)|
 
 # Introduction
 

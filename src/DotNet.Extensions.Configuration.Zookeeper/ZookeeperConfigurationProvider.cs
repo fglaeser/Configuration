@@ -203,7 +203,7 @@ namespace DotNet.Extensions.Configuration.Zookeeper
       var zooKeeperKeys = await GetChildrenAsync(path, true);
       if (zooKeeperKeys == null) return;
 
-      var node = _pathTree.FindNode(path);
+      var node = _pathTree.FindNode(path.Substring(_option.RootPath.Length));
       var originalKeys = node.Children.Select(item => item.Key).ToList();
 
       //indicate that it was added in zooKeeper.
@@ -225,7 +225,7 @@ namespace DotNet.Extensions.Configuration.Zookeeper
         Data.Remove(ConvertPathToKey(pathToRemove));
 
         node.Children.RemoveAll(item => item.Key == childKey);
-        _pathTree.RemoveNode(pathToRemove);
+        _pathTree.RemoveNode(pathToRemove.Substring(_option.RootPath.Length));
       });
     }
 

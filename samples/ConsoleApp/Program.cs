@@ -1,6 +1,7 @@
 ﻿using DotNet.Extensions.Configuration.Zookeeper;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Linq;
 
 namespace ConsoleApp
 {
@@ -25,11 +26,11 @@ namespace ConsoleApp
       var usdRate = configuration["Rate:USD"];    //6.35
       Console.WriteLine($"usd: {usdRate}");
       var hkdRate = configuration["Rate:ARS"];    //0.87
-
+      Console.WriteLine($"ars: {hkdRate}");
       //var notifyMethod = configuration["AccountChangeNotificationMethod"];    //Email
 
       Console.ReadLine();
-
+      configuration.GetSection("Rate").GetChildren().ToList().OrderBy(s => s.Key).ToList().ForEach(s => Console.WriteLine(s.Key));
       usdRate = configuration["Rate:USD"];    //6.35
       Console.WriteLine($"usd: {usdRate}");
 
