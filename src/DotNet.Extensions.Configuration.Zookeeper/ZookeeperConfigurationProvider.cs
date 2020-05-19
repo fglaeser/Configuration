@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 namespace DotNet.Extensions.Configuration.Zookeeper
 {
   /// <summary>
-    /// A zookeeper based <see cref="ConfigurationProvider"/>.
-    /// </summary>
+  /// A zookeeper based <see cref="ConfigurationProvider"/>.
+  /// </summary>
   internal class ZookeeperConfigurationProvider : ConfigurationProvider
   {
     private readonly ZookeeperOption _option;
@@ -21,7 +21,7 @@ namespace DotNet.Extensions.Configuration.Zookeeper
     private ZooKeeper _zooKeeper;
     private NodeWatcher _watcher;
     private PathTree _pathTree;
-    private Exception loadException;
+    private Exception _loadException;
 
     /// <summary>
     /// Initializes a new instance.
@@ -43,16 +43,16 @@ namespace DotNet.Extensions.Configuration.Zookeeper
     /// Loads the configuration data from zookeeper.
     /// </summary>
     public override void Load()
-    { 
+    {
       var isConnected = _connectedEvent.WaitOne(_option.ConnectionTimeout);
       if (!isConnected)
       {
         throw new Exception("connect to zookeeper timeout");
       }
       _loadCompletedEvent.WaitOne();
-      if (loadException != null)
+      if (_loadException != null)
       {
-        throw loadException;
+        throw _loadException;
       }
     }
 
@@ -68,7 +68,12 @@ namespace DotNet.Extensions.Configuration.Zookeeper
         var pair = stack.Pop();
         var path = pair.Key;
         var currentNode = pair.Value;
-        var value = await GetDataAsync(path, true).ConfigureAwait(false);
+        string value = null;
+        try
+        { value = await GetDataAsync(path, true).ConfigureAwait(false); }
+        catch (KeeperException.NoAuthException)
+        { /*There isn't valid authentication for this key, so it is not read*/ }
+
         if (value != null)
         {
           var key = ConvertPathToKey(path);
@@ -226,7 +231,7 @@ namespace DotNet.Extensions.Configuration.Zookeeper
 
     private void HandleException(Exception ex)
     {
-      loadException = ex;
+      _loadException = ex;
     }
   }
 }

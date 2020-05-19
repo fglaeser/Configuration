@@ -1,5 +1,6 @@
 ﻿using org.apache.zookeeper;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DotNet.Extensions.Configuration.Zookeeper
 {
@@ -11,12 +12,18 @@ namespace DotNet.Extensions.Configuration.Zookeeper
     /// <summary>
     /// create zooKeeper instance.
     /// </summary>
-    public ZooKeeper CreateZooKeeper(string connectionString, int sessionTimeout, IEnumerable<AuthData> authData, out NodeWatcher watcher)
+    public ZooKeeper CreateZooKeeper(string connectionString, int sessionTimeout, IEnumerable<AuthData> authData,
+        out NodeWatcher watcher)
     {
       watcher = new NodeWatcher();
       var zk = new ZooKeeper(connectionString, sessionTimeout, watcher);
-      foreach(var auth in authData)
-        zk.addAuthInfo(auth.Scheme, auth.Data);
+
+      if (authData != null && authData.Any())
+      {
+        foreach (var auth in authData)
+          if (auth != null)
+            zk.addAuthInfo(auth.Scheme, auth.Data);
+      }
 
       return zk;
     }

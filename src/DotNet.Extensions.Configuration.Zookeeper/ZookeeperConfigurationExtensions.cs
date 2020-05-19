@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 
 namespace DotNet.Extensions.Configuration.Zookeeper
 {
@@ -14,9 +15,24 @@ namespace DotNet.Extensions.Configuration.Zookeeper
     /// <param name="builder">ConfigurationBuilder</param>
     /// <param name="connectionString">the zookeeper connection string</param>
     /// <param name="rootPath">the zookeeper node path which you want to read it's sub node as key-value</param>
-    /// <param name="timeout">zookeeper session timeout in millsecond</param>       
+    /// <param name="timeout">zookeeper session timeout in millsecond</param>
+    /// <param name="authInfo">authentication information to access keys on ZK</param>
     public static void AddZookeeper(this IConfigurationBuilder builder,
-        string connectionString, string rootPath, int timeout)
+        string connectionString, string rootPath, int timeout, AuthData authInfo = null)
+    {
+      AddZookeeper(builder, connectionString, rootPath, timeout, new List<AuthData>() { authInfo });
+    }
+
+    /// <summary>
+    /// use zookeeper as configuration source
+    /// </summary>
+    /// <param name="builder">ConfigurationBuilder</param>
+    /// <param name="connectionString">the zookeeper connection string</param>
+    /// <param name="rootPath">the zookeeper node path which you want to read it's sub node as key-value</param>
+    /// <param name="timeout">zookeeper session timeout in millsecond</param>
+    /// <param name="authInfo">authentication information to access keys on ZK</param>
+    public static void AddZookeeper(this IConfigurationBuilder builder,
+    string connectionString, string rootPath, int timeout, List<AuthData> authInfo = null)
     {
       if (builder == null)
       {
@@ -36,6 +52,7 @@ namespace DotNet.Extensions.Configuration.Zookeeper
         option.ConnectionString = connectionString;
         option.RootPath = rootPath;
         option.SessionTimeout = timeout;
+        option.AuthInfo = authInfo;
       });
     }
 

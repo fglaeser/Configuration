@@ -1,33 +1,20 @@
 using Microsoft.Extensions.Configuration;
-using Moq;
 using org.apache.zookeeper;
-using org.apache.zookeeper.data;
-using System.Collections.Generic;
+using System;
 using System.Text;
 using Xunit;
 using zk = org.apache.zookeeper;
-using DotNet.Extensions.Configuration.Zookeeper;
-using System;
 
 namespace DotNet.Extensions.Configuration.Zookeeper.Test
 {
   public class ZookeeperConfigurationTest : IDisposable
   {
-    private void CreateAuthKey()
-    {
-      var zk = new ZooKeeper("localhost:2181", 3000, null);
-      List<ACL> mode = ZooDefs.Ids.CREATOR_ALL_ACL;
-      zk.addAuthInfo("digest", Encoding.ASCII.GetBytes("app1:app123"));
-      var res = zk.createAsync("/testauth", null, mode, CreateMode.PERSISTENT);
-      zk.closeAsync().GetAwaiter().GetResult();
-    }
-
     [Fact]
     public void Get_Value_From_Node()
     {
       string usd = "6.35";
       var zk = new ZooKeeper("localhost:2181", 3000, null);
-      zk.createAsync("/AccountApp", null, ZooDefs.Ids.OPEN_ACL_UNSAFE ,CreateMode.PERSISTENT).GetAwaiter().GetResult();
+      zk.createAsync("/AccountApp", null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT).GetAwaiter().GetResult();
       zk.createAsync("/AccountApp/Rate", null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT).GetAwaiter().GetResult();
       zk.createAsync("/AccountApp/Rate/USD", Encoding.UTF8.GetBytes(usd), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT).GetAwaiter().GetResult();
       zk.closeAsync().GetAwaiter().GetResult();
@@ -81,8 +68,21 @@ namespace DotNet.Extensions.Configuration.Zookeeper.Test
       zk.createAsync("/AccountAppAuth2/Rate/USD", Encoding.UTF8.GetBytes(usd), ZooDefs.Ids.CREATOR_ALL_ACL, CreateMode.PERSISTENT).GetAwaiter().GetResult();
       zk.closeAsync().GetAwaiter().GetResult();
 
-      IConfigurationBuilder builder = new ConfigurationBuilder();
-      builder.AddZookeeper(option =>
+      IConfigurationBuilder builder1 = new ConfigurationBuilder();
+      builder1.AddZookeeper(option =>
+      {
+        option.ConnectionString = "localhost:2181";
+        option.ConnectionTimeout = 10000;
+        option.RootPath = "/AccountAppAuth2";
+        option.SessionTimeout = 30000;
+        option.AddAuthInfo("digest", Encoding.UTF8.GetBytes("user1:pass1"));
+      });
+
+      var configurationForUser1 = builder1.Build();
+      Assert.Equal(usd, configurationForUser1["Rate:USD"]);
+
+      IConfigurationBuilder builder2 = new ConfigurationBuilder();
+      builder2.AddZookeeper(option =>
       {
         option.ConnectionString = "localhost:2181";
         option.ConnectionTimeout = 10000;
@@ -90,13 +90,9 @@ namespace DotNet.Extensions.Configuration.Zookeeper.Test
         option.SessionTimeout = 30000;
         option.AddAuthInfo("digest", Encoding.UTF8.GetBytes("user2:pass1"));
       });
-      Assert.Throws<org.apache.zookeeper.KeeperException.NoAuthException> (() => {
 
-        var configuration = builder.Build();
-        Assert.Equal(usd, configuration["Rate:USD"]);
-
-      });
-
+      var configurationForUser2 = builder2.Build();
+      Assert.Null(configurationForUser2["Rate:USD"]);
     }
 
     [Fact]
@@ -111,7 +107,8 @@ namespace DotNet.Extensions.Configuration.Zookeeper.Test
         option.RootPath = "/NonExistingPath";
         option.SessionTimeout = 30000;
       });
-      Assert.Throws<org.apache.zookeeper.KeeperException.NoNodeException>(() => {
+      Assert.Throws<KeeperException.NoNodeException>(() =>
+      {
 
         var configuration = builder.Build();
         Assert.Equal(usd, configuration["Rate:USD"]);
@@ -120,12 +117,6 @@ namespace DotNet.Extensions.Configuration.Zookeeper.Test
 
     }
 
-    private zk.ZooKeeper CreateZookeeper()
-    {
-        zk.ZooKeeper zk;            
-        var client = new Mock<zk.ZooKeeper>(MockBehavior.Strict);
-        return client.Object;
-    }
     public void Dispose()
     {
       var zk = new ZooKeeper("localhost:2181", 3000, null);
@@ -136,7 +127,7 @@ namespace DotNet.Extensions.Configuration.Zookeeper.Test
         zk.deleteAsync("/AccountApp").GetAwaiter().GetResult();
       }
       byte[] auth = Encoding.UTF8.GetBytes("user1:pass1");
-      
+
       zk.addAuthInfo("digest", auth);
 
       if (zk.existsAsync("/AccountAppAuth").GetAwaiter().GetResult() != null)
