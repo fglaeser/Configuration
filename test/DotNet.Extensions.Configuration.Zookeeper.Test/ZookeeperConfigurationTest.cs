@@ -68,8 +68,21 @@ namespace DotNet.Extensions.Configuration.Zookeeper.Test
       zk.createAsync("/AccountAppAuth2/Rate/USD", Encoding.UTF8.GetBytes(usd), ZooDefs.Ids.CREATOR_ALL_ACL, CreateMode.PERSISTENT).GetAwaiter().GetResult();
       zk.closeAsync().GetAwaiter().GetResult();
 
-      IConfigurationBuilder builder = new ConfigurationBuilder();
-      builder.AddZookeeper(option =>
+      IConfigurationBuilder builder1 = new ConfigurationBuilder();
+      builder1.AddZookeeper(option =>
+      {
+        option.ConnectionString = "localhost:2181";
+        option.ConnectionTimeout = 10000;
+        option.RootPath = "/AccountAppAuth2";
+        option.SessionTimeout = 30000;
+        option.AddAuthInfo("digest", Encoding.UTF8.GetBytes("user1:pass1"));
+      });
+
+      var configurationForUser1 = builder1.Build();
+      Assert.Equal(usd, configurationForUser1["Rate:USD"]);
+
+      IConfigurationBuilder builder2 = new ConfigurationBuilder();
+      builder2.AddZookeeper(option =>
       {
         option.ConnectionString = "localhost:2181";
         option.ConnectionTimeout = 10000;
@@ -77,14 +90,9 @@ namespace DotNet.Extensions.Configuration.Zookeeper.Test
         option.SessionTimeout = 30000;
         option.AddAuthInfo("digest", Encoding.UTF8.GetBytes("user2:pass1"));
       });
-      Assert.Throws<KeeperException.NoAuthException>(() =>
-      {
 
-        var configuration = builder.Build();
-        Assert.Equal(usd, configuration["Rate:USD"]);
-
-      });
-
+      var configurationForUser2 = builder2.Build();
+      Assert.Null(configurationForUser2["Rate:USD"]);
     }
 
     [Fact]
