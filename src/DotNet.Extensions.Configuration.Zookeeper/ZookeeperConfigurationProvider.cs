@@ -203,7 +203,7 @@ namespace DotNet.Extensions.Configuration.Zookeeper
       var zooKeeperKeys = await GetChildrenAsync(path, true);
       if (zooKeeperKeys == null) return;
 
-      var node = _pathTree.FindNode(path.Substring(_option.RootPath.Length));
+      var node = _pathTree.FindNode(path.Equals(_option.RootPath) ? "/" : path.Substring(_option.RootPath.Length));
       var originalKeys = node.Children.Select(item => item.Key).ToList();
 
       //indicate that it was added in zooKeeper.
