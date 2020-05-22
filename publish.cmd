@@ -1,2 +1,2 @@
 rem dotnet build -c Release
-dotnet nuget push .\src\DotNet.Extensions.Configuration.Zookeeper\bin\Release\DotNet.Extensions.Configuration.Zookeeper.*.nupkg -s https://www.nuget.org -k oy2ddeclctse7gre6dya3ske2cb5og7uxchdvpqqkyytyi
+dotnet nuget push .\src\DotNet.Extensions.Configuration.Zookeeper\bin\Release\Extensions.Configuration.Zookeeper.*.nupkg -s https://www.nuget.org -k %1
