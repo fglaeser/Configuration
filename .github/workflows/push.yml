@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
     paths:
-     - 'Directory.build.props'
+     - 'Directory.Build.props'
 
 jobs:
   pack_and_push:

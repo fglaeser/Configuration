@@ -4,11 +4,11 @@ on:
   push:
     branches: [ master ]
     paths-ignore:
-      - 'Directory.build.props'
+      - 'Directory.Build.props'
   pull_request:
     branches: [ master ]
     paths-ignore:
-      - 'Directory.build.props'    
+      - 'Directory.Build.props'    
 
 jobs:
   build:
