@@ -22,5 +22,6 @@ jobs:
     - name: Build
       run: dotnet build Configuration.sln -c Release --no-restore      
     - name: Pack
-      run: dotnet pack Configuration.sln --no-build -c Release -o dist
-
+      run: dotnet pack Configuration.sln --no-build -c Release -o artifacts
+    - name: Push
+      run: dotnet nuget push artifacts/**.nupkg -s https://www.nuget.org -k ${{secrets.NUGET_TOKEN}}
