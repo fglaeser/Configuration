@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
     paths:
-     - 'src/Directory.build.props'
+     - 'Directory.build.props'
 
 jobs:
   pack_and_push:
@@ -20,7 +20,7 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build src/DotNet.Extensions.Configuration.Zookeeper/DotNet.Extensions.Configuration.Zookeeper.csproj -c Release --no-restore      
+      run: dotnet build Configuration.sln -c Release --no-restore      
     - name: Pack
-      run: dotnet pack src/DotNet.Extensions.Configuration.Zookeeper/DotNet.Extensions.Configuration.Zookeeper.csproj --no-build -c Release -o dist
+      run: dotnet pack Configuration.sln --no-build -c Release -o dist
 
