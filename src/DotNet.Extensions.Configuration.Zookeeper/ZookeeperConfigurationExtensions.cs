@@ -17,10 +17,10 @@ namespace DotNet.Extensions.Configuration.Zookeeper
     /// <param name="rootPath">the zookeeper node path which you want to read it's sub node as key-value</param>
     /// <param name="timeout">zookeeper session timeout in millsecond</param>
     /// <param name="authInfo">authentication information to access keys on ZK</param>
-    public static void AddZookeeper(this IConfigurationBuilder builder,
+    public static IConfigurationBuilder AddZookeeper(this IConfigurationBuilder builder,
         string connectionString, string rootPath, int timeout, AuthData authInfo = null)
     {
-      AddZookeeper(builder, connectionString, rootPath, timeout, new List<AuthData>() { authInfo });
+      return AddZookeeper(builder, connectionString, rootPath, timeout, new List<AuthData>() { authInfo });
     }
 
     /// <summary>
@@ -31,7 +31,7 @@ namespace DotNet.Extensions.Configuration.Zookeeper
     /// <param name="rootPath">the zookeeper node path which you want to read it's sub node as key-value</param>
     /// <param name="timeout">zookeeper session timeout in millsecond</param>
     /// <param name="authInfo">authentication information to access keys on ZK</param>
-    public static void AddZookeeper(this IConfigurationBuilder builder,
+    public static IConfigurationBuilder AddZookeeper(this IConfigurationBuilder builder,
     string connectionString, string rootPath, int timeout, List<AuthData> authInfo = null)
     {
       if (builder == null)
@@ -54,6 +54,8 @@ namespace DotNet.Extensions.Configuration.Zookeeper
         option.SessionTimeout = timeout;
         option.AuthInfo = authInfo;
       });
+
+      return builder;
     }
 
     /// <summary>
@@ -61,7 +63,7 @@ namespace DotNet.Extensions.Configuration.Zookeeper
     /// </summary>
     /// <param name="builder">The <see cref="IConfigurationBuilder"/> to add to.</param>
     /// <param name="config">configures the zookeeper optoin</param>
-    public static void AddZookeeper(this IConfigurationBuilder builder, Action<ZookeeperOption> config)
+    public static IConfigurationBuilder AddZookeeper(this IConfigurationBuilder builder, Action<ZookeeperOption> config)
     {
       if (builder == null)
       {
@@ -73,6 +75,8 @@ namespace DotNet.Extensions.Configuration.Zookeeper
 
       var source = new ZookeeperConfigurationSource() { Option = option };
       builder.Add(source);
+
+      return builder;
     }
   }
 }
